@@ -22,7 +22,29 @@ function start() {
       document.getElementById('today-forecast-more-info').innerHTML = description;
       document.getElementById('icon-weather-container').innerHTML = icon;
       document.getElementById('today-forecast-temp').innerHTML = `${temp}°C`;
-      
+      apiWeather
+      .getThreeDaysForecast()
+      .then(function(response2) {
+        const list = response2.data.list;
+        var main_tab = [];
+        var description_tab=[];
+        var temp_tab=[];
+        var icon_tab=[];
+        list.forEach(function(element, index)
+        {
+          if(index!=0)
+          {
+            const main = (list[index].weather[0].main);
+            const description = list[index].weather[0].description;
+            const icon= apiWeather.getHTMLElementFromIcon(list[index].weather[0].icon);
+            const temp = list[index].temp.day;
+            document.getElementById(`day${(index+1)}-forecast-main`).innerHTML = main;
+            document.getElementById(`day${index+1}-forecast-more-info`).innerHTML = description;
+            document.getElementById(`icon${index+1}-weather-container`).innerHTML = icon;
+            document.getElementById(`day${index+1}-forecast-temp`).innerHTML = `${temp}°C`;
+          }
+        });
+      })
     })
   .catch(function(error) {
       // Affiche une erreur
@@ -56,10 +78,6 @@ function start(city) {
       .getThreeDaysForecast()
       .then(function(response2) {
         const list = response2.data.list;
-        var main_tab = [];
-        var description_tab=[];
-        var temp_tab=[];
-        var icon_tab=[];
         list.forEach(function(element, index)
         {
           if(index!=0)
